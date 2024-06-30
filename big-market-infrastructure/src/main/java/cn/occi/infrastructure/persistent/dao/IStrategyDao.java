@@ -1,5 +1,6 @@
 package cn.occi.infrastructure.persistent.dao;
 
+import cn.occi.domain.strategy.model.entity.StrategyEntity;
 import cn.occi.infrastructure.persistent.po.Strategy;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,5 +15,8 @@ import java.util.List;
 public interface IStrategyDao {
 
     List<Strategy> queryStrategyList();
+
+    Strategy queryStrategyByStrategyId(Long strategyId);
+
 
 }

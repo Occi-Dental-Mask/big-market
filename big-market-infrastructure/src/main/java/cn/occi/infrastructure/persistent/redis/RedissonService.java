@@ -28,6 +28,10 @@ public class RedissonService implements IRedisService {
     }
 
     public <T> T getValue(String key) {
+        if (!redissonClient.getBucket(key).isExists()) {
+            // 返回默认值或者抛出异常
+            return null; // 或者 throw new KeyNotFoundException("Key not found in Redis: " + key);
+        }
         return redissonClient.<T>getBucket(key).get();
     }
 

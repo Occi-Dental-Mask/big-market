@@ -1,6 +1,8 @@
 package cn.occi.domain.strategy.repository;
 
 import cn.occi.domain.strategy.model.entity.StrategyAwardEntity;
+import cn.occi.domain.strategy.model.entity.StrategyEntity;
+import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -20,24 +22,34 @@ public interface IStrategyRepository {
 
     /**
      * 存储策略奖品搜索概率表
-     * @param strategyId
+     * @param key
      * @param size
      * @param map
      */
-    void storeStrategyAwardSearchRateTable(Long strategyId, int size, Map<Integer, Integer> map);
+    void storeStrategyAwardSearchRateTable(String key, int size, Map<Integer, Integer> map);
 
     /**
      * 获取奖品id
-     * @param strategyId
+     * @param key
      * @param i
      * @return
      */
-    Integer getRandomAwardId(Long strategyId, int i);
+    Integer getRandomAwardId(String key, int i);
 
     /**
      * 获取概率区间
-     * @param strategyId
+     * @param key
      * @return
      */
-    int getRateRange(Long strategyId);
+    int getRateRange(String key);
+
+    /**
+     * 查询策略规则
+     * @param strategyId
+     * @param ruleModel
+     * @return
+     */
+    StrategyRuleEntity queryStrategyRule(Long strategyId, String ruleModel);
+
+    StrategyEntity queryStrategyEntityByStrategyId(Long strategyId);
 }

@@ -12,9 +12,5 @@ public interface IStrategyWarehouse {
      */
     public boolean assembleStrategyConfig(Long strategyId);
 
-    /**
-     * 根据策略id随机获得奖品id
-     */
-    public Integer getRandomAwardId(Long strategyId);
 
 }
