@@ -44,7 +44,7 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
         StrategyRuleEntity ruleEntity = strategyRepo.queryStrategyRule(strategyId, "rule_weight");
 
 
-        Map<String, List<Integer>> ruleWeightValues = ruleEntity.getRuleWeightValues();
+        Map<String, List<Integer>> ruleWeightValues = ruleEntity.getRuleWeightLists();
         Set<String> keys = ruleWeightValues.keySet();
         for (String key: keys) {
             List<Integer> ruleWeightValue = ruleWeightValues.get(key);

@@ -29,7 +29,6 @@ public class StrategyEntity {
     }
 
 
-
     public String getRuleWeight() {
         String[] ruleModels = this.ruleModels();
         for (String ruleModel : ruleModels) {
