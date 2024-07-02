@@ -35,7 +35,7 @@ public class WeightRuleFilter implements IRuleFilter {
         log.info("规则过滤-权重范围 userId:{} strategyId:{} ruleModel:{}", ruleMatterEntity.getUserId(), ruleMatterEntity.getStrategyId(), ruleMatterEntity.getRuleModel());
 
         // 查询StrategyRule
-        StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(ruleMatterEntity.getStrategyId(), ruleMatterEntity.getRuleModel());
+        StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(ruleMatterEntity.getStrategyId(), null, ruleMatterEntity.getRuleModel());
 
         // 获取到ruleValue
         Map<Long, String> ruleWeightValues = strategyRuleEntity.getRuleWeightValues();

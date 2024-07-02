@@ -1,6 +1,8 @@
 package cn.occi.infrastructure.persistent.po;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,6 +12,8 @@ import java.util.Date;
  * @date: 2024/6/28
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StrategyRule {
     /** 自增ID */
     private Long id;

@@ -41,7 +41,7 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
         // 查询strategy_rule表，找出strategy_id是否有对应的rule_weight策略
         // 如果有，根据rule_weight找出对应的rule_weight_values
         // 6000:102,103,104,105,106,107,108,109 5000:101,102,103,104,105,106,107,108,109
-        StrategyRuleEntity ruleEntity = strategyRepo.queryStrategyRule(strategyId, "rule_weight");
+        StrategyRuleEntity ruleEntity = strategyRepo.queryStrategyRule(strategyId, null,"rule_weight");
 
 
         Map<String, List<Integer>> ruleWeightValues = ruleEntity.getRuleWeightLists();
@@ -111,7 +111,10 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
 
     @Override
     public Integer getRandomAwardId(Long strategyId) {
-        int rateRange = strategyRepo.getRateRange(String.valueOf(strategyId));
+        Integer rateRange = strategyRepo.getRateRange(String.valueOf(strategyId));
+        if (rateRange == null) {
+            return null;
+        }
         return strategyRepo.getRandomAwardId(String.valueOf(strategyId), new SecureRandom().nextInt(rateRange));
     }
 

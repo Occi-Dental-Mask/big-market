@@ -84,10 +84,11 @@ public class StrategyRepository implements IStrategyRepository {
     }
 
     @Override
-    public StrategyRuleEntity queryStrategyRule(Long strategyId, String ruleModel) {
+    public StrategyRuleEntity queryStrategyRule(Long strategyId, Integer awardId, String ruleModel) {
         StrategyRule strategyRuleReq = new StrategyRule();
         strategyRuleReq.setStrategyId(strategyId);
         strategyRuleReq.setRuleModel(ruleModel);
+        strategyRuleReq.setAwardId(awardId);
         StrategyRule strategyRuleRes = strategyRuleDao.queryStrategyRule(strategyRuleReq);
         return StrategyRuleEntity.builder()
                 .strategyId(strategyRuleRes.getStrategyId())
@@ -115,5 +116,10 @@ public class StrategyRepository implements IStrategyRepository {
                 .build();        // 将数据存入缓存
         redisService.setValue(cacheKey, strategyEntity);
         return strategyEntity;
+    }
+
+    @Override
+    public String queryStrategyRuleModel(Long strategyId, Integer awardId) {
+        return strategyAwardDao.queryStrategyRule(strategyId, awardId);
     }
 }

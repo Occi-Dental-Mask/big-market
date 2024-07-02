@@ -5,7 +5,6 @@ import cn.occi.domain.strategy.model.entity.RuleActionEntity;
 import cn.occi.domain.strategy.model.entity.RuleMatterEntity;
 import cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import cn.occi.domain.strategy.service.factory.LogicFilterFactory;
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
 import cn.occi.domain.strategy.service.rule.IRuleFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO.TAKE_OVER;
+import static cn.occi.domain.strategy.service.factory.LogicFilterFactory.LogicModel.RULE_LOCK;
 
 /**
  * @description:
@@ -30,6 +32,11 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
 
     @Override
     protected RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> doCheckRaffleBeforeLogic(RaffleFactorEntity raffleFactorEntity, String... logics) {
+        if (logics == null || 0 == logics.length) return RuleActionEntity.<RuleActionEntity.RaffleBeforeEntity>builder()
+                .code(RuleLogicCheckTypeVO.ALLOW.getCode())
+                .info(RuleLogicCheckTypeVO.ALLOW.getInfo())
+                .build();
+
         Map<String, IRuleFilter<RuleActionEntity.RaffleBeforeEntity>> logicFilterGroup = logicFactory.openLogicFilter();
 
         // 黑名单规则优先过滤
@@ -73,4 +80,28 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
         return ruleActionEntity;
     }
 
+    @Override
+    protected RuleActionEntity<RuleActionEntity.RaffleDuringEntity> doCheckRaffleDuringLogic(RaffleFactorEntity raffleFactorEntity, Integer awardId, String... ruleModels) {
+        Map<String, IRuleFilter<RuleActionEntity.RaffleDuringEntity>> logicFilterGroup = logicFactory.openLogicFilter();
+        RuleActionEntity<RuleActionEntity.RaffleDuringEntity> ruleActionEntity = null;
+        // rule_lock 优先过滤
+        String ruleLock = Arrays.stream(ruleModels)
+                .filter(str -> str.contains(RULE_LOCK.getCode()))
+                .findFirst()
+                .orElse(null);
+        if (StringUtils.isNotBlank(ruleLock)) {
+            IRuleFilter<RuleActionEntity.RaffleDuringEntity> logicFilter = logicFilterGroup.get(RULE_LOCK.getCode());
+            RuleMatterEntity ruleMatterEntity = new RuleMatterEntity();
+            ruleMatterEntity.setUserId(raffleFactorEntity.getUserId());
+            ruleMatterEntity.setAwardId(awardId);
+            ruleMatterEntity.setStrategyId(raffleFactorEntity.getStrategyId());
+            ruleMatterEntity.setRuleModel(RULE_LOCK.getCode());
+            ruleActionEntity = logicFilter.filterRule(ruleMatterEntity);
+            if (TAKE_OVER.getCode().equals(ruleActionEntity.getCode())) {
+                return ruleActionEntity;
+            }
+        }
+        return ruleActionEntity;
+
+    }
 }

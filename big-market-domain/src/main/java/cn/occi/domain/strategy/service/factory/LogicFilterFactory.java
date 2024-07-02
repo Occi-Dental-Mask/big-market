@@ -42,7 +42,7 @@ public class LogicFilterFactory {
 
         RULE_WEIGHT("rule_weight","【抽奖前规则】根据抽奖权重返回可抽奖范围KEY"),
         RULE_BLACKLIST("rule_blacklist","【抽奖前规则】黑名单规则过滤，命中黑名单则直接返回"),
-
+        RULE_LOCK("rule_lock","【抽奖中规则】锁定规则过滤，命中锁定规则则直接返回")
         ;
 
         private final String code;

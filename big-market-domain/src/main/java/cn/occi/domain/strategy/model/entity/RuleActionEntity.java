@@ -19,7 +19,6 @@ public class RuleActionEntity <T extends RuleActionEntity.RaffleEntity>{
 
     private String code = RuleLogicCheckTypeVO.ALLOW.getCode();
     private String info = RuleLogicCheckTypeVO.ALLOW.getInfo();
-
     private String ruleModel;
 
     private T data;
@@ -39,4 +38,13 @@ public class RuleActionEntity <T extends RuleActionEntity.RaffleEntity>{
     }
 
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class RaffleDuringEntity extends RaffleEntity {
+        private Long strategyId;
+        private Long countRange;
+        private Integer awardId;
+    }
 }

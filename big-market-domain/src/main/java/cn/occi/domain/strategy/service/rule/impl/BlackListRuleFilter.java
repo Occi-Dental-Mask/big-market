@@ -33,7 +33,7 @@ public class BlackListRuleFilter implements IRuleFilter {
 
         String userId = ruleMatterEntity.getUserId();
         // 查询黑名单
-        StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(ruleMatterEntity.getStrategyId(), ruleMatterEntity.getRuleModel());
+        StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(ruleMatterEntity.getStrategyId(), null, ruleMatterEntity.getRuleModel());
         if (strategyRuleEntity == null) {
             // 没有这个规则，放行
             return RuleActionEntity.builder().code(RuleLogicCheckTypeVO.ALLOW.getCode()).info(RuleLogicCheckTypeVO.ALLOW.getInfo())
