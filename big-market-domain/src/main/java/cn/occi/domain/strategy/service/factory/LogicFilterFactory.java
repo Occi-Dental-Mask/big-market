@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class LogicFilterFactory {
 
-    public Map<String, IRuleFilter<?>> logicFilterMap = new ConcurrentHashMap<>();
+    public  Map<String, IRuleFilter<?>> logicFilterMap = new ConcurrentHashMap<>();
 
     public LogicFilterFactory(List<IRuleFilter<?>> logicFilters) {
         logicFilters.forEach(logic -> {
