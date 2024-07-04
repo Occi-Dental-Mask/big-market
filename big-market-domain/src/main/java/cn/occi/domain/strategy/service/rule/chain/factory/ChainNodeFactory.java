@@ -55,6 +55,7 @@ public class ChainNodeFactory {
         IResponseNode current = logicChain;
         for (int i = 1; i < ruleModels.length; i++) {
             IResponseNode nextChain = applicationContext.getBean(ruleModels[i], IResponseNode.class);
+            
             current = current.appendNext(nextChain);
         }
 
