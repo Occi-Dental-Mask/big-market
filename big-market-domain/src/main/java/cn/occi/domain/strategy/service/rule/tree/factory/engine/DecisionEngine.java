@@ -35,7 +35,7 @@ public class DecisionEngine implements IDecisionEngine{
             List<RuleTreeNodeLineVO> treeNodeLineVOList = pointNode.getTreeNodeLineVOList();
             strategyAwardData = treeActionEntity.getStrategyAwardData();
             log.info("决策树引擎【{}】treeId:{} node:{} info:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(), nextNodeName, treeActionEntity.getRuleLogicCheckType().getInfo());
-            if (ruleTreeVO == null || treeNodeLineVOList == null || treeNodeLineVOList.isEmpty() ){
+            if (treeNodeLineVOList == null || treeNodeLineVOList.isEmpty()){
                 break;
             }
             for (RuleTreeNodeLineVO ruleTreeNodeLineVO : treeNodeLineVOList) {
