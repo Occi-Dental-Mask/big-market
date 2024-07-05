@@ -2,6 +2,7 @@ package cn.occi.domain.strategy.service.rule.chain.impl;
 
 import cn.occi.domain.strategy.service.orm.IStrategyDraw;
 import cn.occi.domain.strategy.service.rule.chain.IResponseNode;
+import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -21,9 +22,10 @@ public class DefaultRuleNode extends AbstractIResponseNode {
     @Resource
     private IStrategyDraw strategyDraw;
     @Override
-    public Integer executeNode(String userId, Long strategyId) {
+    public ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId) {
         // 4. 默认抽奖流程
         Integer awardId = strategyDraw.getRandomAwardId(strategyId);
-        return awardId;
+        return ChainNodeFactory.StrategyAwardVO.builder().awardId(awardId).
+                logicModel(ChainNodeFactory.LogicModel.RULE_DEFAULT.getCode()).build();
     }
 }

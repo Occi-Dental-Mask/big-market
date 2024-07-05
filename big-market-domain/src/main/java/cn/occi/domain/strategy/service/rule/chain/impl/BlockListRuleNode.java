@@ -2,6 +2,7 @@ package cn.occi.domain.strategy.service.rule.chain.impl;
 
 import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
 import cn.occi.domain.strategy.repository.IStrategyRepository;
+import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -24,7 +25,7 @@ public class BlockListRuleNode extends AbstractIResponseNode {
     private IStrategyRepository strategyRepository;
 
     @Override
-    public Integer executeNode(String userId, Long strategyId) {
+    public ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId) {
         log.info("规则过滤-黑名单 userId:{} strategyId:{} ruleModel:{rule_blacklist}", userId, strategyId);
 
         // 查询黑名单
@@ -38,7 +39,8 @@ public class BlockListRuleNode extends AbstractIResponseNode {
         Map<Integer, List<String>> blackListUserValues = strategyRuleEntity.getBlackListUserValues();
         for (Map.Entry<Integer, List<String>> entry : blackListUserValues.entrySet()) {
             if (entry.getValue().contains(userId)) {
-                return entry.getKey();
+                return ChainNodeFactory.StrategyAwardVO.builder().awardId(entry.getKey()).
+                        logicModel(ChainNodeFactory.LogicModel.RULE_BLACKLIST.getCode()).build();
             }
         }
         // 用户不在黑名单中，放行

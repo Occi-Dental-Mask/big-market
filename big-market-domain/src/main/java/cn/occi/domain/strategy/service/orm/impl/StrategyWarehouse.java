@@ -6,6 +6,8 @@ import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
 import cn.occi.domain.strategy.repository.IStrategyRepository;
 import cn.occi.domain.strategy.service.orm.IStrategyDraw;
 import cn.occi.domain.strategy.service.orm.IStrategyWarehouse;
+import cn.occi.types.exception.AppException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,7 @@ import java.util.*;
  * @date: 2024/6/29
  */
 @Service
+@Slf4j
 public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
 
     @Resource
@@ -122,7 +125,11 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
     public Integer getRandomAwardId(Long strategyId, String ruleWeightValue) {
         String key = String.valueOf(strategyId).concat("_").concat(ruleWeightValue);
         // 分布式部署下，不一定为当前应用做的策略装配。也就是值不一定会保存到本应用，而是分布式应用，所以需要从 Redis 中获取。
-        int rateRange = strategyRepo.getRateRange(key);
+        Integer rateRange = strategyRepo.getRateRange(key);
+        if (rateRange == null) {
+            //抛出异常
+            log.info("错误！！！没有装配概率策略");
+        }
         // 通过生成的随机值，获取概率值奖品查找表的结果
         return strategyRepo.getRandomAwardId(key, new SecureRandom().nextInt(rateRange));
     }

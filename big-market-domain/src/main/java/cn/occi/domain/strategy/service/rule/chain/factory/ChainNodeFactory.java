@@ -77,7 +77,7 @@ public class ChainNodeFactory {
          */
         private Integer awardId;
         /**
-         *
+         * 逻辑模型
          */
         private String logicModel;
     }

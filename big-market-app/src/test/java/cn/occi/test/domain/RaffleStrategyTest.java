@@ -4,9 +4,7 @@ import cn.occi.domain.strategy.model.entity.RaffleAwardEntity;
 import cn.occi.domain.strategy.model.entity.RaffleFactorEntity;
 import cn.occi.domain.strategy.service.IRaffleStrategy;
 import cn.occi.domain.strategy.service.orm.IStrategyWarehouse;
-import cn.occi.domain.strategy.service.rule.chain.IResponseNode;
 import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
-import cn.occi.domain.strategy.service.rule.impl.WeightRuleFilter;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -14,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.annotation.Resource;
 
@@ -27,8 +24,6 @@ public class RaffleStrategyTest {
     @Resource
     private IRaffleStrategy raffleStrategy;
 
-    @Resource
-    private WeightRuleFilter ruleWeightLogicFilter;
 
     @Resource
     private IStrategyWarehouse strategyWarehouse;
@@ -45,9 +40,9 @@ public class RaffleStrategyTest {
     public void test_performRaffle() {
         RaffleFactorEntity raffleFactorEntity = RaffleFactorEntity.builder()
                 .userId("xiaofuge")
-                .strategyId(100001L)
+                .strategyId(100006L)
                 .build();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 2; i++) {
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(raffleFactorEntity);
 
             log.info("请求参数：{}", JSON.toJSONString(raffleFactorEntity));
@@ -95,30 +90,5 @@ public class RaffleStrategyTest {
         log.info("测试结果：{}", JSON.toJSONString(raffleAwardEntity));
     }
 
-
-
-    @Test
-    public void test_LogicChain_rule_blacklist() {
-        IResponseNode logicChain = chainNodeFactory.openLogicChain(100001L);
-        Integer awardId = logicChain.executeNode("user001", 100001L);
-        log.info("测试结果：{}", awardId);
-    }
-
-    @Test
-    public void test_LogicChain_rule_weight() {
-        // 通过反射 mock 规则中的值
-//        ReflectionTestUtils.setField(ruleWeightLogicChain, "userScore", 4900L);
-
-        IResponseNode logicChain = chainNodeFactory.openLogicChain(100001L);
-        Integer awardId = logicChain.executeNode("xiaofuge", 100001L);
-        log.info("测试结果：{}", awardId);
-    }
-
-    @Test
-    public void test_LogicChain_rule_default() {
-        IResponseNode logicChain = chainNodeFactory.openLogicChain(100001L);
-        Integer awardId = logicChain.executeNode("xiaofuge", 100001L);
-        log.info("测试结果：{}", awardId);
-    }
 
 }

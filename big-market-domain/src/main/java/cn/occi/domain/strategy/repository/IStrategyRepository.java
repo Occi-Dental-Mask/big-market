@@ -3,6 +3,7 @@ package cn.occi.domain.strategy.repository;
 import cn.occi.domain.strategy.model.entity.StrategyAwardEntity;
 import cn.occi.domain.strategy.model.entity.StrategyEntity;
 import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
+import cn.occi.domain.strategy.model.vo.RuleTreeVO;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public interface IStrategyRepository {
      * @param key
      * @return
      */
-    int getRateRange(String key);
+    Integer getRateRange(String key);
 
     /**
      * 查询策略规则
@@ -54,4 +55,6 @@ public interface IStrategyRepository {
     StrategyEntity queryStrategyEntityByStrategyId(Long strategyId);
 
     String queryStrategyRuleModel(Long strategyId, Integer awardId);
+
+    RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
 }

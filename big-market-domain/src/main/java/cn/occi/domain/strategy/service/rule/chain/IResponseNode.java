@@ -1,5 +1,7 @@
 package cn.occi.domain.strategy.service.rule.chain;
 
+import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
+
 /**
  * @description:
  * @author: occi
@@ -7,5 +9,5 @@ package cn.occi.domain.strategy.service.rule.chain;
  */
 public interface IResponseNode extends IResponseNodeArm{
 
-    Integer executeNode(String userId, Long strategyId);
+    ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId);
 }

@@ -22,18 +22,18 @@ public class DecisionEngine implements IDecisionEngine{
         this. treeNodeGroup=  treeNodeGroup;
         this.ruleTreeVO = ruleTreeVO;
     }
-    public TreeNodeFactory.StrategyAwardData process(String userId, Long strategyId, Integer awardId) {
+    public TreeNodeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId) {
         String rootNodeName = ruleTreeVO.getTreeRootRuleNode();
         Map<String, RuleTreeNodeVO> treeNodeMap = ruleTreeVO.getTreeNodeMap();
         String nextNodeName = rootNodeName;
         RuleTreeNodeVO rootNode = treeNodeMap.get(rootNodeName);
         RuleTreeNodeVO pointNode = rootNode;
-        TreeNodeFactory.StrategyAwardData strategyAwardData = null;
+        TreeNodeFactory.StrategyAwardVO StrategyAwardVO = null;
         while (pointNode != null) {
             ILogicTreeNode logicTreeNode = treeNodeGroup.get(pointNode.getRuleKey());
             TreeNodeFactory.TreeActionEntity treeActionEntity = logicTreeNode.executeNode(userId, strategyId, awardId);
             List<RuleTreeNodeLineVO> treeNodeLineVOList = pointNode.getTreeNodeLineVOList();
-            strategyAwardData = treeActionEntity.getStrategyAwardData();
+            StrategyAwardVO = treeActionEntity.getStrategyAwardVO();
             log.info("决策树引擎【{}】treeId:{} node:{} info:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(), nextNodeName, treeActionEntity.getRuleLogicCheckType().getInfo());
             if (treeNodeLineVOList == null || treeNodeLineVOList.isEmpty()){
                 break;
@@ -48,7 +48,7 @@ public class DecisionEngine implements IDecisionEngine{
                 }
             }
         }
-        return strategyAwardData;
+        return StrategyAwardVO;
 
 
     }

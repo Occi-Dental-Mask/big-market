@@ -7,6 +7,7 @@ import cn.occi.domain.strategy.repository.IStrategyRepository;
 import cn.occi.domain.strategy.service.factory.LogicFilterFactory;
 import cn.occi.domain.strategy.service.orm.IStrategyDraw;
 import cn.occi.domain.strategy.service.rule.chain.IResponseNode;
+import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -33,7 +34,7 @@ public class WeightRuleNode extends AbstractIResponseNode {
     @Resource
     private IStrategyDraw strategyDraw;
     @Override
-    public Integer executeNode(String userId, Long strategyId) {
+    public ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId) {
         log.info("规则过滤-权重范围 userId:{} strategyId:{} ruleModel:{}", userId, strategyId, "rule_weight");
 
         // 查询StrategyRule
@@ -53,7 +54,8 @@ public class WeightRuleNode extends AbstractIResponseNode {
         if (key != null) {
             // 接管
             Integer awardId = strategyDraw.getRandomAwardId(strategyId, String.valueOf(key));
-            return awardId;
+            return ChainNodeFactory.StrategyAwardVO.builder().awardId(awardId).
+                    logicModel(ChainNodeFactory.LogicModel.RULE_WEIGHT.getCode()).build();
         }
         //没有大于userScore的值，无需进行操作，放行
         return next().executeNode(userId, strategyId);

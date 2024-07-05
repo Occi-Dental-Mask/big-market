@@ -43,8 +43,13 @@ public class StrategyTest {
     }
     @Before
     public void test_assembleStrategyConfig() {
-        boolean success = strategyWarehouse.assembleStrategyConfig(100001L);
-        log.info("测试结果：{}", success);
+//        boolean success = strategyWarehouse.assembleStrategyConfig(100001L);
+//        strategyWarehouse.assembleStrategyConfig(100006L);
+        for (int i = 1; i <= 6; i++) {
+            strategyWarehouse.assembleStrategyConfig(Long.valueOf("10000" + String.valueOf(i)));
+        }
+
+        log.info("测试结果：{}", "装配成功!" );
     }
 
     @Test
