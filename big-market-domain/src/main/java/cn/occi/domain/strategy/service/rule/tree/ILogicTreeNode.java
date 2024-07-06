@@ -9,5 +9,5 @@ import cn.occi.domain.strategy.service.rule.tree.factory.TreeNodeFactory;
  */
 public interface ILogicTreeNode {
 
-    TreeNodeFactory.TreeActionEntity executeNode(String userId, Long strategyId, Integer awardId);
+    TreeNodeFactory.TreeActionEntity executeNode(String userId, Long strategyId, Integer awardId, String ruleWeightValue);
 }

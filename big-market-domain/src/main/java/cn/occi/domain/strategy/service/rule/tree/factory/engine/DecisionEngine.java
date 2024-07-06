@@ -26,12 +26,11 @@ public class DecisionEngine implements IDecisionEngine{
         String rootNodeName = ruleTreeVO.getTreeRootRuleNode();
         Map<String, RuleTreeNodeVO> treeNodeMap = ruleTreeVO.getTreeNodeMap();
         String nextNodeName = rootNodeName;
-        RuleTreeNodeVO rootNode = treeNodeMap.get(rootNodeName);
-        RuleTreeNodeVO pointNode = rootNode;
+        RuleTreeNodeVO pointNode = treeNodeMap.get(rootNodeName);
         TreeNodeFactory.StrategyAwardVO StrategyAwardVO = null;
         while (pointNode != null) {
             ILogicTreeNode logicTreeNode = treeNodeGroup.get(pointNode.getRuleKey());
-            TreeNodeFactory.TreeActionEntity treeActionEntity = logicTreeNode.executeNode(userId, strategyId, awardId);
+            TreeNodeFactory.TreeActionEntity treeActionEntity = logicTreeNode.executeNode(userId, strategyId, awardId, pointNode.getRuleValue());
             List<RuleTreeNodeLineVO> treeNodeLineVOList = pointNode.getTreeNodeLineVOList();
             StrategyAwardVO = treeActionEntity.getStrategyAwardVO();
             log.info("决策树引擎【{}】treeId:{} node:{} info:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(), nextNodeName, treeActionEntity.getRuleLogicCheckType().getInfo());

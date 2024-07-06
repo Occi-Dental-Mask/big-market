@@ -1,12 +1,8 @@
 package cn.occi.domain.strategy.service.rule.chain.impl;
 
-import cn.occi.domain.strategy.model.entity.RuleActionEntity;
 import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
-import cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import cn.occi.domain.strategy.repository.IStrategyRepository;
-import cn.occi.domain.strategy.service.factory.LogicFilterFactory;
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
-import cn.occi.domain.strategy.service.rule.chain.IResponseNode;
+import cn.occi.domain.strategy.service.orm.IStrategyDispatch;
 import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -29,10 +25,11 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 
 public class WeightRuleNode extends AbstractIResponseNode {
+    public Long userScore = 0L;
     @Resource
     private IStrategyRepository strategyRepository;
     @Resource
-    private IStrategyDraw strategyDraw;
+    private IStrategyDispatch strategyDraw;
     @Override
     public ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId) {
         log.info("规则过滤-权重范围 userId:{} strategyId:{} ruleModel:{}", userId, strategyId, "rule_weight");
@@ -44,7 +41,7 @@ public class WeightRuleNode extends AbstractIResponseNode {
         Map<Long, String> ruleWeightValues = strategyRuleEntity.getRuleWeightValues();
 
         // 获取到用户的积分
-        Long userScore = 4500L; // 暂时设置为固定值 todo 之后修改
+//        userScore = 4500L; // 暂时设置为固定值 todo 之后修改
 
         // 按照ruleWeightValues的key值进行排序，然后找到第一个大于等于userScore的key值
         List<Long> sortedKeys = new ArrayList<>(ruleWeightValues.keySet());

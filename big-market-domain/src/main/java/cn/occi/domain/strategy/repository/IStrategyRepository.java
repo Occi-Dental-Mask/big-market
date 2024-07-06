@@ -4,6 +4,7 @@ import cn.occi.domain.strategy.model.entity.StrategyAwardEntity;
 import cn.occi.domain.strategy.model.entity.StrategyEntity;
 import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
 import cn.occi.domain.strategy.model.vo.RuleTreeVO;
+import cn.occi.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 
 import java.util.List;
 import java.util.Map;
@@ -57,4 +58,35 @@ public interface IStrategyRepository {
     String queryStrategyRuleModel(Long strategyId, Integer awardId);
 
     RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
+
+    void stockStrategyAwardCount(String cacheKey, Integer awardCount);
+
+    /**
+     * 扣减某个策略中的某个奖品库存
+     * @param strategyId
+     * @param awardId
+     * @return
+     */
+    Boolean deductAwardStock(Long strategyId, Integer awardId);
+
+    /**
+     * 写入奖品库存消费队列
+     * @param strategyAwardStockKeyVO
+     */
+    void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
+
+    /**
+     * 获取奖品库存消费队列
+     * @return
+     */
+    StrategyAwardStockKeyVO takeQueueValue();
+
+    /**
+     * 更新奖品库存消耗
+     * @param strategyId
+     * @param awardId
+     */
+    void updateStrategyAwardStock(Long strategyId, Integer awardId);
 }
+
+

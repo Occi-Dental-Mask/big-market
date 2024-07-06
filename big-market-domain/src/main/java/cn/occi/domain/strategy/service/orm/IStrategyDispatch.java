@@ -5,7 +5,7 @@ package cn.occi.domain.strategy.service.orm;
  * @author: occi
  * @date: 2024/6/30
  */
-public interface IStrategyDraw {
+public interface IStrategyDispatch {
 
 
     /**
@@ -17,4 +17,10 @@ public interface IStrategyDraw {
      * 根据策略id和权重策略随机获得奖品id
      */
     public Integer getRandomAwardId(Long strategyId, String ruleWeightValue);
+
+    /***
+     * 减少库存
+     * @return
+     */
+    Boolean deductAwardStock(Long strategyId, Integer awardId);
 }

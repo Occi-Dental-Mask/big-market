@@ -1,6 +1,6 @@
 package cn.occi.domain.strategy.service.rule.chain.impl;
 
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
+import cn.occi.domain.strategy.service.orm.IStrategyDispatch;
 import cn.occi.domain.strategy.service.rule.chain.IResponseNode;
 import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DefaultRuleNode extends AbstractIResponseNode {
     @Resource
-    private IStrategyDraw strategyDraw;
+    private IStrategyDispatch strategyDraw;
     @Override
     public ChainNodeFactory.StrategyAwardVO executeNode(String userId, Long strategyId) {
         // 4. 默认抽奖流程

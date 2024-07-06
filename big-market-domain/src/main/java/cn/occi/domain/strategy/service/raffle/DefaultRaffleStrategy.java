@@ -1,28 +1,12 @@
 package cn.occi.domain.strategy.service.raffle;
 
-import cn.occi.domain.strategy.model.entity.RaffleFactorEntity;
-import cn.occi.domain.strategy.model.entity.RuleActionEntity;
-import cn.occi.domain.strategy.model.entity.RuleMatterEntity;
-import cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import cn.occi.domain.strategy.model.vo.RuleTreeVO;
-import cn.occi.domain.strategy.model.vo.StrategyAwardRuleModelVO;
-import cn.occi.domain.strategy.repository.IStrategyRepository;
-import cn.occi.domain.strategy.service.factory.LogicFilterFactory;
-import cn.occi.domain.strategy.service.rule.IRuleFilter;
+import cn.occi.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 import cn.occi.domain.strategy.service.rule.tree.factory.TreeNodeFactory;
 import cn.occi.domain.strategy.service.rule.tree.factory.engine.IDecisionEngine;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO.TAKE_OVER;
-import static cn.occi.domain.strategy.service.factory.LogicFilterFactory.LogicModel.RULE_LOCK;
 
 /**
  * @description:
@@ -46,4 +30,15 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
         IDecisionEngine treeEngine = treeNodeFactory.openDecisionEngine(ruleTreeVO);
         return treeEngine.process(userId, strategyId, awardId);
     }
+
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() throws InterruptedException {
+        return repository.takeQueueValue();
+    }
+
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+        repository.updateStrategyAwardStock(strategyId, awardId);
+    }
+
 }

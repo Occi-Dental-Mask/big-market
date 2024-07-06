@@ -38,7 +38,7 @@ public class TreeNodeFactory {
     @NoArgsConstructor
     public static class TreeActionEntity {
         private RuleLogicCheckTypeVO ruleLogicCheckType;
-        private StrategyAwardVO StrategyAwardVO;
+        private StrategyAwardVO strategyAwardVO;
     }
 
     @Data
@@ -51,7 +51,5 @@ public class TreeNodeFactory {
         /** 抽奖奖品规则 */
         private String awardRuleValue;
     }
-
-
 
 }

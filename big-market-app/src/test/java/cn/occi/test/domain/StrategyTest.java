@@ -1,7 +1,7 @@
 package cn.occi.test.domain;
 
 import cn.occi.domain.strategy.repository.IStrategyRepository;
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
+import cn.occi.domain.strategy.service.orm.IStrategyDispatch;
 import cn.occi.domain.strategy.service.orm.IStrategyWarehouse;
 import cn.occi.infrastructure.persistent.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class StrategyTest {
     private IRedisService redisService;
 
     @Resource
-    private IStrategyDraw strategyDraw;
+    private IStrategyDispatch strategyDraw;
     /**
      * 策略ID；100001L、100002L 装配的时候创建策略表写入到 Redis Map 中
      */

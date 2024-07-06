@@ -6,7 +6,8 @@ import cn.occi.domain.strategy.model.entity.RuleActionEntity;
 import cn.occi.domain.strategy.model.entity.StrategyEntity;
 import cn.occi.domain.strategy.repository.IStrategyRepository;
 import cn.occi.domain.strategy.service.IRaffleStrategy;
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
+import cn.occi.domain.strategy.service.IStockHandle;
+import cn.occi.domain.strategy.service.orm.IStrategyDispatch;
 import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
 import cn.occi.domain.strategy.service.rule.tree.factory.TreeNodeFactory;
 import cn.occi.types.enums.ResponseCode;
@@ -17,8 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Resource;
 import javax.swing.tree.TreeNode;
 
-import static cn.occi.domain.strategy.model.vo.RuleLogicCheckTypeVO.TAKE_OVER;
-import static cn.occi.domain.strategy.service.factory.LogicFilterFactory.LogicModel.*;
 
 /**
  * @description:
@@ -26,13 +25,13 @@ import static cn.occi.domain.strategy.service.factory.LogicFilterFactory.LogicMo
  * @date: 2024/7/1
  */
 @Slf4j
-public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
+public abstract class AbstractRaffleStrategy implements IRaffleStrategy, IStockHandle {
 
 
     @Resource
     protected IStrategyRepository repository;
     @Resource
-    protected IStrategyDraw strategyDraw;
+    protected IStrategyDispatch strategyDraw;
     
     @Resource
     protected ChainNodeFactory chainNodeFactory;

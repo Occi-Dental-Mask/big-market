@@ -5,6 +5,8 @@ import cn.occi.domain.strategy.model.entity.RaffleFactorEntity;
 import cn.occi.domain.strategy.service.IRaffleStrategy;
 import cn.occi.domain.strategy.service.orm.IStrategyWarehouse;
 import cn.occi.domain.strategy.service.rule.chain.factory.ChainNodeFactory;
+import cn.occi.domain.strategy.service.rule.chain.impl.WeightRuleNode;
+import cn.occi.domain.strategy.service.rule.tree.impl.LockTreeNode;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -12,8 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CountDownLatch;
 
 
 @Slf4j
@@ -24,7 +28,10 @@ public class RaffleStrategyTest {
     @Resource
     private IRaffleStrategy raffleStrategy;
 
-
+    @Resource
+    private WeightRuleNode ruleWeightLogicChain;
+    @Resource
+    private LockTreeNode ruleLockLogicTreeNode;
     @Resource
     private IStrategyWarehouse strategyWarehouse;
     
@@ -37,7 +44,7 @@ public class RaffleStrategyTest {
 //    }
 
     @Test
-    public void test_performRaffle() {
+    public void test_performRaffle() throws InterruptedException {
         RaffleFactorEntity raffleFactorEntity = RaffleFactorEntity.builder()
                 .userId("xiaofuge")
                 .strategyId(100006L)
@@ -49,6 +56,7 @@ public class RaffleStrategyTest {
             log.info("测试结果：{}", JSON.toJSONString(raffleAwardEntity));
         }
 
+        new CountDownLatch(1).await();
 
     }
 
@@ -66,11 +74,13 @@ public class RaffleStrategyTest {
     }
 
 
-
     @Before
     public void test_strategyArmory() {
-        boolean success = strategyWarehouse.assembleStrategyConfig(100003L);
+        boolean success = strategyWarehouse.assembleStrategyConfig(100006L);
         log.info("测试结果：{}", success);
+        // 通过反射 mock 规则中的值
+        ReflectionTestUtils.setField(ruleWeightLogicChain, "userScore", 4900L);
+        ReflectionTestUtils.setField(ruleLockLogicTreeNode, "userRaffleCount", 10L);
     }
 
     /**

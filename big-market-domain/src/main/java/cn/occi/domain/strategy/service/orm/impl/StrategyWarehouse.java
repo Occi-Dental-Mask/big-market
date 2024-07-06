@@ -4,8 +4,9 @@ import cn.occi.domain.strategy.model.entity.StrategyAwardEntity;
 import cn.occi.domain.strategy.model.entity.StrategyEntity;
 import cn.occi.domain.strategy.model.entity.StrategyRuleEntity;
 import cn.occi.domain.strategy.repository.IStrategyRepository;
-import cn.occi.domain.strategy.service.orm.IStrategyDraw;
+import cn.occi.domain.strategy.service.orm.IStrategyDispatch;
 import cn.occi.domain.strategy.service.orm.IStrategyWarehouse;
+import cn.occi.types.common.Constants;
 import cn.occi.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,21 +24,22 @@ import java.util.*;
  */
 @Service
 @Slf4j
-public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
+public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDispatch {
 
     @Resource
     private IStrategyRepository strategyRepo;
-
 
     @Override
     public boolean assembleStrategyConfig(Long strategyId) {
         // 1. 查询策略配置
         List<StrategyAwardEntity> awardEntityList = strategyRepo.queryStrategyAwardList(strategyId);
-        // 2. 普通策略装配
+        // 2. 存储奖品库存
+        assembleStock(awardEntityList, strategyId);
+        // 3. 普通策略装配
         assembleStrategyProb(String.valueOf(strategyId), awardEntityList);
-        // 3.权重策略装配
+        // 4.权重策略装配
         // 查询strategy表，找出rule_weight字段
-        // 2. 权重策略配置 - 适用于 rule_weight 权重规则配置
+        // 5. 权重策略配置 - 适用于 rule_weight 权重规则配置
         StrategyEntity strategyEntity = strategyRepo.queryStrategyEntityByStrategyId(strategyId);
         String ruleWeight = strategyEntity.getRuleWeight();
         if (null == ruleWeight) return true;
@@ -74,11 +76,6 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
             }
         }
 
-
-//        BigDecimal minAwardRate = strategyAwardEntities.stream()
-//                .map(StrategyAwardEntity::getAwardRate)
-//                .min(BigDecimal::compareTo)
-//                .orElse(BigDecimal.ZERO);
 
         // 判断是否为0
         if (BigDecimal.ZERO.equals(minAwardRate)) {
@@ -133,4 +130,21 @@ public class StrategyWarehouse implements IStrategyWarehouse, IStrategyDraw {
         // 通过生成的随机值，获取概率值奖品查找表的结果
         return strategyRepo.getRandomAwardId(key, new SecureRandom().nextInt(rateRange));
     }
+
+    @Override
+    public Boolean deductAwardStock(Long strategyId, Integer awardId) {
+        return strategyRepo.deductAwardStock(strategyId, awardId);
+    }
+
+
+    private void assembleStock(List<StrategyAwardEntity> awardEntityList, Long strategyId) {
+        // 缓存奖品库存到Redis
+        for (StrategyAwardEntity awardEntity : awardEntityList) {
+            Integer awardId = awardEntity.getAwardId();
+            String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + ":" + awardId;
+            strategyRepo.stockStrategyAwardCount(cacheKey, awardEntity.getAwardCount());
+        }
+    }
 }
+
+
