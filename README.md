@@ -1,2 +1,1 @@
-# xfg-frame-archetype - DDD 脚手架
-
+内容来源于小傅哥的知识星球
